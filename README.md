@@ -1,21 +1,21 @@
-# 📄 RBAC Document Management System
+# RBAC Document Management System
 
 A document management system with role-based access control and a complete audit trail.
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 JWT-based authentication (register/login)
-- 👥 Role-based access control — **Owner**, **Editor**, **Viewer**
-- 📝 Document versioning — every edit creates a new version, nothing is overwritten
-- 🔑 Owners can grant/revoke access to other users per document
-- 🕵️ Full audit trail — every view, edit, delete, and permission change is logged
-- 🐳 One-command setup with Docker Compose
+- JWT-based authentication (register/login)
+- Role-based access control — **Owner**, **Editor**, **Viewer**
+- Document versioning — every edit creates a new version, nothing is overwritten
+- Owners can grant/revoke access to other users per document
+- Full audit trail — every view, edit, delete, and permission change is logged
+- One-command setup with Docker Compose
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Backend:** Node.js, Express, MongoDB, Mongoose, JWT
 **Frontend:** React
@@ -23,7 +23,7 @@ A document management system with role-based access control and a complete audit
 
 ---
 
-## 📂 Folder Structure
+## Folder Structure
 
 ```
 rbac-doc-system/
@@ -43,7 +43,7 @@ rbac-doc-system/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 1. Clone the repo
    ```bash
@@ -76,7 +76,7 @@ rbac-doc-system/
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Method | Route | Description |
 |--------|-------|-------------|
