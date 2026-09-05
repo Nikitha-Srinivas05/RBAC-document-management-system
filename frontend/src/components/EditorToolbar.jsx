@@ -1,4 +1,4 @@
-export default function EditorToolbar({ editor }) {
+export default function EditorToolbar({ editor, disabled }) {
   if (!editor) return null;
 
   const btn = (label, isActive, onClick) => (
@@ -6,8 +6,8 @@ export default function EditorToolbar({ editor }) {
       type="button"
       className={isActive ? 'is-active' : ''}
       onClick={onClick}
-      // Prevent the editor from losing focus/selection when clicking a button
       onMouseDown={(e) => e.preventDefault()}
+      disabled={disabled}
     >
       {label}
     </button>

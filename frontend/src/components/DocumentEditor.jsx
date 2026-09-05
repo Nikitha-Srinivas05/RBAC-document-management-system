@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import EditorToolbar from './EditorToolbar.jsx';
@@ -5,30 +6,37 @@ import EditorToolbar from './EditorToolbar.jsx';
 /**
  * DocumentEditor
  *
- * Solves the "manual formatting is painful" problem: instead of the user
- * setting font size/weight by hand for every heading (the MS Word pain
- * point), they pick a style from the toolbar (H1, H2, Bullet List, etc.)
- * and the styling is applied consistently every time, defined once in
- * index.css under `.editor-content`.
- *
- * `initialContent` / `onChange` let this be used both for creating a new
- * document and for editing an existing one - the parent page owns the
- * actual save-to-backend logic (POST/PUT to /api/documents).
+ * `initialContent` loads once the parent has fetched it from the API
+ * (async), so we sync it into the editor via useEffect once it arrives.
+ * `editable` is driven by the user's role - Viewers see the content but
+ * can't type into it, enforced here in the UI (the backend middleware is
+ * the real enforcement; this is just to avoid a confusing UX where a
+ * Viewer can type but the save silently fails).
  */
-export default function DocumentEditor({ initialContent = '', onChange }) {
+export default function DocumentEditor({ initialContent = '', onChange, editable = true }) {
   const editor = useEditor({
     extensions: [StarterKit],
     content: initialContent,
+    editable,
     onUpdate: ({ editor }) => {
-      // Emit HTML - this is what gets sent to the backend and stored
-      // as DocumentVersion.content
       onChange?.(editor.getHTML());
     },
   });
 
+  useEffect(() => {
+    if (editor && initialContent && editor.getHTML() !== initialContent) {
+      editor.commands.setContent(initialContent);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialContent, editor]);
+
+  useEffect(() => {
+    editor?.setEditable(editable);
+  }, [editable, editor]);
+
   return (
     <div className="editor-box">
-      <EditorToolbar editor={editor} />
+      {editable && <EditorToolbar editor={editor} />}
       <EditorContent editor={editor} className="editor-content" />
     </div>
   );
