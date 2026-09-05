@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const requireAuth = require('../middleware/authMiddleware');
+const requireDocumentPermission = require('../middleware/permissionMiddleware');
 const Document = require('../models/Document');
 const DocumentVersion = require('../models/DocumentVersion');
 const Permission = require('../models/Permission');
@@ -9,11 +10,6 @@ const AuditLog = require('../models/AuditLog');
 
 const router = express.Router();
 router.use(requireAuth);
-
-async function getUserRole(userId, documentId) {
-  const permission = await Permission.findOne({ user: userId, document: documentId }).populate('role');
-  return permission ? permission.role : null;
-}
 
 router.post('/', async (req, res) => {
   const session = await mongoose.startSession();
@@ -74,13 +70,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireDocumentPermission('canView'), async (req, res) => {
   try {
-    const role = await getUserRole(req.user.id, req.params.id);
-    if (!role || !role.canView) {
-      return res.status(403).json({ error: 'You do not have access to this document' });
-    }
-
     const document = await Document.findOne({ _id: req.params.id, isDeleted: false }).populate('currentVersion');
     if (!document) return res.status(404).json({ error: 'Document not found' });
 
@@ -97,17 +88,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireDocumentPermission('canEdit'), async (req, res) => {
   const session = await mongoose.startSession();
   try {
     const { content } = req.body;
     if (content === undefined) {
       return res.status(400).json({ error: 'content is required' });
-    }
-
-    const role = await getUserRole(req.user.id, req.params.id);
-    if (!role || !role.canEdit) {
-      return res.status(403).json({ error: 'You do not have edit access to this document' });
     }
 
     const document = await Document.findOne({ _id: req.params.id, isDeleted: false });
@@ -141,13 +127,8 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.get('/:id/versions', async (req, res) => {
+router.get('/:id/versions', requireDocumentPermission('canView'), async (req, res) => {
   try {
-    const role = await getUserRole(req.user.id, req.params.id);
-    if (!role || !role.canView) {
-      return res.status(403).json({ error: 'You do not have access to this document' });
-    }
-
     const versions = await DocumentVersion.find({ document: req.params.id })
       .populate('editedBy', 'name email')
       .sort({ versionNumber: -1 });
@@ -158,13 +139,8 @@ router.get('/:id/versions', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireDocumentPermission('canDelete'), async (req, res) => {
   try {
-    const role = await getUserRole(req.user.id, req.params.id);
-    if (!role || !role.canDelete) {
-      return res.status(403).json({ error: 'You do not have delete access to this document' });
-    }
-
     const document = await Document.findById(req.params.id);
     if (!document) return res.status(404).json({ error: 'Document not found' });
 
