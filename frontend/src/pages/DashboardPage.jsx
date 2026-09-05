@@ -67,8 +67,8 @@ export default function DashboardPage() {
               <Link to={`/documents/${doc._id}`}>
                 <span className="doc-title">{doc.title}</span>
                 <span className="doc-meta">
-                  v{doc.currentVersion?.versionNumber ?? 1} · updated{' '}
-                  {new Date(doc.updatedAt).toLocaleDateString()}
+                    Version {doc.currentVersion?.versionNumber ?? 1}, updated{' '}
+                    {new Date(doc.updatedAt).toLocaleDateString()}
                 </span>
               </Link>
             </li>
