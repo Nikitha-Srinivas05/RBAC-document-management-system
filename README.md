@@ -91,5 +91,5 @@ rbac-doc-system/
 | POST | `/api/permissions/:documentId` | Grant or update a user's role on a document (Owner only) |
 | GET | `/api/permissions/:documentId` | List everyone with access to a document (Owner only) |
 | DELETE | `/api/permissions/:documentId/:userId` | Revoke a user's access to a document (Owner only) |
-
-The audit trail viewer and full frontend UI are still in progress.
+| GET | `/api/audit/document/:id` | Full activity history for a document (Owner only) |
+| GET | `/api/audit/me` | The current user's activity across all documents |
