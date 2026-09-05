@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const seedRoles = require('./config/seedRoles');
 const authRoutes = require('./routes/authRoutes');
 const permissionRoutes = require('./routes/permissionRoutes');
+const auditRoutes = require('./routes/auditRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 
 const app = express();
@@ -16,6 +17,7 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/permissions', permissionRoutes);
+app.use('/api/audit', auditRoutes);
 // Day 2+ will add: /api/documents, /api/permissions, /api/audit
 
 const PORT = process.env.PORT || 5000;
