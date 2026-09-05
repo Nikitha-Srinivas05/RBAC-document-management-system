@@ -82,5 +82,14 @@ rbac-doc-system/
 |--------|-------|-------------|
 | POST | `/api/auth/register` | Create a new account |
 | POST | `/api/auth/login` | Log in and get a JWT |
+| POST | `/api/documents` | Create a document (creates version 1, grants creator "owner") |
+| GET | `/api/documents` | List documents the current user has access to |
+| GET | `/api/documents/:id` | Get a document's current content (logs a VIEW) |
+| PUT | `/api/documents/:id` | Edit a document (creates a new version) |
+| GET | `/api/documents/:id/versions` | Get a document's full version history |
+| DELETE | `/api/documents/:id` | Soft-delete a document (Owner only) |
+| POST | `/api/permissions/:documentId` | Grant or update a user's role on a document (Owner only) |
+| GET | `/api/permissions/:documentId` | List everyone with access to a document (Owner only) |
+| DELETE | `/api/permissions/:documentId/:userId` | Revoke a user's access to a document (Owner only) |
 
-More endpoints (documents, permissions, audit logs) are being added as the project progresses.
+The audit trail viewer and full frontend UI are still in progress.
