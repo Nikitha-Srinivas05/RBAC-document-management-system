@@ -47,7 +47,7 @@ rbac-doc-system/
 
 1. Clone the repo
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/Nikitha-Srinivas05/RBAC-document-management-system.git
    cd rbac-doc-system
    ```
 
